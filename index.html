@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17324d"><title>Maintenance Management</title>
+<link rel="manifest" href="manifest.json"><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div><strong>MAINTENANCE MANAGEMENT</strong><small>ระบบจัดการงานซ่อมบำรุง</small></div><button id="logout" class="secondary hidden">ออกจากระบบ</button></header>
+<main>
+<section id="loginView" class="panel">
+<h1>เข้าสู่ระบบ</h1><p>ลงชื่อเข้าใช้ด้วย Google เพื่อส่งคำขอเข้าใช้งาน</p>
+<button id="loginBtn">เข้าสู่ระบบด้วย Google</button>
+<p class="muted">สมาชิกใหม่ต้องได้รับอนุมัติจากผู้ดูแลก่อนจึงจะเข้าถึงข้อมูลได้</p>
+</section>
+<section id="pendingView" class="panel hidden"><h1>รอการอนุมัติ</h1><p>บัญชีของคุณส่งคำขอแล้ว กรุณารอผู้ดูแลระบบอนุมัติ</p><p id="pendingEmail" class="muted"></p><button id="refreshStatus" class="secondary">ตรวจสอบอีกครั้ง</button></section>
+<section id="appView" class="hidden">
+<div class="welcome"><div><h1>ภาพรวมงานซ่อม</h1><p id="userInfo" class="muted"></p></div><span id="roleTag" class="tag"></span></div>
+<nav id="nav">
+<button data-tab="dashboard" class="active">ภาพรวม</button><button data-tab="repairs">งานซ่อม</button><button data-tab="systems">จัดการระบบ</button><button data-tab="contractors">ผู้รับเหมา</button><button data-tab="evaluations">ประเมิน</button><button data-tab="members" class="admin-only">สมาชิก</button>
+</nav>
+<section id="dashboard" class="tab panel">
+<div class="stats"><article><b id="statSystems">0</b><span>ระบบ</span></article><article><b id="statOpen">0</b><span>งานค้าง</span></article><article><b id="statDone">0</b><span>งานเสร็จ</span></article><article><b id="statContractors">0</b><span>ผู้รับเหมา</span></article></div>
+<h2>รายการซ่อมล่าสุด</h2><div id="recentRepairs" class="table-wrap"></div>
+</section>
+<section id="repairs" class="tab panel hidden">
+<div class="section-head"><h2>บันทึกงานซ่อม</h2><button id="newRepair">+ เพิ่มงานซ่อม</button></div>
+<form id="repairForm" class="form hidden">
+<input type="hidden" id="repairId"><div class="form-grid">
+<label>วันที่ซ่อม<input id="repairDate" type="date" required></label>
+<label>ระบบ<select id="repairSystem" required></select></label>
+<label>จุดที่ซ่อม<input id="repairLocation" required></label><label>หมายเลขเครื่อง<input id="repairEquipment"></label>
+<label>อาการเสีย<input id="repairIssue" required></label><label>สาเหตุ<input id="repairCause"></label>
+<label class="wide">วิธีแก้ไข<textarea id="repairAction"></textarea></label>
+<label>ผู้รับเหมา<select id="repairContractor"></select></label>
+<label>สถานะ<select id="repairStatus"><option>รอดำเนินการ</option><option>กำลังดำเนินการ</option><option>เสร็จแล้ว</option></select></label>
+</div><div class="actions"><button type="submit">บันทึก</button><button type="button" id="cancelRepair" class="secondary">ยกเลิก</button></div></form>
+<div id="repairList" class="table-wrap"></div>
+</section>
+<section id="systems" class="tab panel hidden">
+<h2>จัดการรายการระบบ</h2><form id="systemForm" class="inline-form"><input id="systemName" placeholder="ชื่อระบบใหม่" required><button>+ เพิ่มระบบ</button></form><div id="systemList"></div>
+<p class="muted">ระบบที่มีประวัติแล้วควรปิดใช้งานแทนการลบ เพื่อรักษาประวัติย้อนหลัง</p>
+</section>
+<section id="contractors" class="tab panel hidden">
+<h2>ผู้รับเหมา</h2><form id="contractorForm" class="inline-form"><input id="contractorName" placeholder="ชื่อบริษัทผู้รับเหมา" required><button>+ เพิ่มผู้รับเหมา</button></form><div id="contractorList"></div>
+</section>
+<section id="evaluations" class="tab panel hidden">
+<h2>ประเมินผู้รับเหมา</h2><form id="evaluationForm" class="form"><div class="form-grid">
+<label>ผู้รับเหมา<select id="evalContractor" required></select></label><label>วันที่<input id="evalDate" type="date" required></label>
+<label>คุณภาพงาน (1–5)<input id="quality" type="number" min="1" max="5" value="5" required></label><label>ความรวดเร็ว (1–5)<input id="speed" type="number" min="1" max="5" value="5" required></label>
+<label>แก้ปัญหาตรงจุด (1–5)<input id="solution" type="number" min="1" max="5" value="5" required></label><label>ความเรียบร้อย (1–5)<input id="neatness" type="number" min="1" max="5" value="5" required></label>
+<label>การประสานงาน (1–5)<input id="coordination" type="number" min="1" max="5" value="5" required></label><label class="wide">หมายเหตุ<textarea id="evalNote"></textarea></label>
+</div><button>บันทึกผลประเมิน</button></form><div id="evaluationList" class="table-wrap"></div>
+</section>
+<section id="members" class="tab panel hidden"><h2>จัดการสมาชิก</h2><p class="muted">อนุมัติสมาชิก เปลี่ยนบทบาท และระงับบัญชีได้จากหน้านี้</p><div id="memberList" class="table-wrap"></div></section>
+</section>
+</main>
+<footer>Maintenance Management System · ต้นแบบสำหรับติดตั้งและเชื่อมต่อ Firebase</footer>
+<script type="module" src="app.js"></script>
+</body></html>
