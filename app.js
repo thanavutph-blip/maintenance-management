@@ -1,17 +1,9 @@
 // Firebase starter: ใส่ค่าจาก Firebase Console ใน firebaseConfig ก่อนใช้งาน
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithRedirect, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, updateDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB4IEWP0lZRFzitNPkJiN8Uq-2Hmm6XO9o",
-  authDomain: "maintenance-management-bde6.firebaseapp.com",
-  projectId: "maintenance-management-bde6",
-  storageBucket: "maintenance-management-bde6.firebasestorage.app",
-  messagingSenderId: "1039084599361",
-  appId: "1:1039084599361:web:03b8ddd873f63b1d712ec0",
-  measurementId: "G-9V7FM8YRQ5"
-};
+const firebaseConfig = { apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT.firebaseapp.com", projectId:"YOUR_PROJECT_ID", appId:"YOUR_APP_ID" };
 const configured = !Object.values(firebaseConfig).some(v=>String(v).includes("YOUR_"));
 let auth,db,user=null,profile=null;
 const $=id=>document.getElementById(id);
@@ -20,7 +12,7 @@ const today=()=>new Date().toISOString().slice(0,10);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 async function init(){if(!configured){$("loginView").innerHTML='<h1>ยังไม่ได้ตั้งค่า Firebase</h1><p>เปิดไฟล์ README_TH.md เพื่อทำตามขั้นตอนตั้งค่าก่อนเปิดใช้งานจริง</p>';return}
  const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);
- $("loginBtn").onclick=async()=>{try{await signInWithRedirect(auth,new GoogleAuthProvider())}catch(e){alert(e.message)}};
+ $("loginBtn").onclick=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){alert(e.message)}};
  $("logout").onclick=()=>signOut(auth);$("refreshStatus").onclick=()=>location.reload();
  onAuthStateChanged(auth,async u=>{user=u;if(!u){show("loginView");show("pendingView",false);show("appView",false);show("logout",false);return}
  show("loginView",false);show("logout",true);$("pendingEmail").textContent=u.email;

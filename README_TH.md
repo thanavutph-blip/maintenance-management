@@ -13,11 +13,11 @@
 2. Project settings > Your apps > Add app > Web แล้วคัดลอก firebaseConfig
 3. Authentication > Sign-in method > เปิด Google
 4. Firestore Database > Create database (production mode)
-5. ค่า `firebaseConfig` ใน `app.js` ถูกใส่ให้แล้วสำหรับโปรเจ็กต์ `maintenance-management-bde6`
+5. แก้ `firebaseConfig` ใน `app.js` ด้วยค่าจาก Firebase Console
 6. ใน Firestore Rules วาง `firestore.rules` แล้ว Publish
 7. ติดตั้ง Node.js และ Firebase CLI: `npm install -g firebase-tools`
 8. เข้าสู่ระบบ: `firebase login`
-9. ไฟล์ `.firebaserc` ถูกตั้งค่าเป็นโปรเจ็กต์ `maintenance-management-bde6` ให้แล้ว (ตรวจสอบก่อน deploy)
+9. คัดลอก `.firebaserc.example` เป็น `.firebaserc` แล้วแทนค่า project ID
 10. จากโฟลเดอร์นี้รัน `firebase deploy --only hosting,firestore:rules`
 
 เว็บไซต์จะอยู่ที่ `https://PROJECT_ID.web.app`
@@ -39,8 +39,3 @@
 
 ## โครงสร้างข้อมูล
 `users`, `systems`, `repairs`, `contractors`, `evaluations`
-
-## หมายเหตุสำหรับการเริ่มต้น Admin
-- Firestore Rules ป้องกันไม่ให้ผู้ใช้ตั้งตนเองเป็น Admin ผ่านเว็บไซต์
-- ดังนั้นต้องกำหนด Admin คนแรกและคนที่สองด้วยตนเองใน Firebase Console ตามขั้นตอนข้างต้นก่อน
-- เมื่อกำหนด `role = admin` และ `status = approved` ให้ทั้งสองบัญชีแล้ว จึงใช้เมนูสมาชิกในเว็บเพื่ออนุมัติและกำหนดสิทธิ์บัญชีอื่นได้
